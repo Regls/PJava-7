@@ -47,4 +47,8 @@ public class LancamentoVenda {
         this.dataVencimento = dataVencimento;
         this.venda = venda;
     }
+    public String toString(){
+        return "\nLancamento " +nParcela+ "\nValor: " +valor+"\nNº da Parcela: " +nParcela+
+                "\nData Vencimento: " +dataVencimento;
+    }
 }

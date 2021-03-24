@@ -4,12 +4,13 @@ import java.text.DateFormat;
 import java.util.*;
 
 import entities.Cliente;
+import entities.LancamentoVenda;
 import entities.Venda;
 
 
 public class Program {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Locale.setDefault(new Locale("pt", "BR"));
         Scanner sc = new Scanner(System.in);
@@ -61,6 +62,7 @@ public class Program {
             String cpf = sc.nextLine();
             System.out.println("Dia do vencimento: ");
             int diaVencimento = sc.nextInt();
+            cal.set(Calendar.DAY_OF_MONTH, diaVencimento);
             System.out.println("Id do cliente: ");
             int id = sc.nextInt();
 
@@ -106,6 +108,10 @@ public class Program {
                 System.out.println("Lançamentos dessa venda: ");
                 for (Venda venda : cliente.getVendas()) {
                     if (idV == venda.getId()) {
+                        venda.lancarVenda();
+                        System.out.println(venda.getLancamentoVendas());
+                    }
+                        /*
                         if (dia < cliente.getDiaVencimento()) {
                             for (int i = 0; i < venda.getQuantidadedeParcelas(); i++) {
                                 System.out.printf("- Lancamento %d -\n", i + 1);
@@ -129,6 +135,30 @@ public class Program {
                             }
                         }
                     }
+
+                         */
+                }
+            }
+        }
+        System.out.println("Digite um mês especifico para retornar os lançamentos deste mês: ");
+        int mesEsp = sc.nextInt();
+        for (Cliente cliente : listClientes) {
+            for (Venda venda : cliente.getVendas()) {
+                for (LancamentoVenda lancamentoVenda : venda.getLancamentoVendas()) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(lancamentoVenda.getDataVencimento());
+                    if (calendar.get(Calendar.MONTH)+1 == mesEsp) {
+                        System.out.println(lancamentoVenda);
+                    }
+                }
+            }
+        }
+        System.out.println("Digite um dia especifico para retornar as vendas deste dia: ");
+        int diaEsp = sc.nextInt();
+        for (Cliente cliente : listClientes){
+            for (Venda venda : cliente.getVendas()){
+                if (cal.get(Calendar.DAY_OF_MONTH) == diaEsp){
+                    System.out.println(venda);
                 }
             }
         }

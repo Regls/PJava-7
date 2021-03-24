@@ -1,6 +1,9 @@
 package entities;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Venda {
@@ -9,7 +12,6 @@ public class Venda {
     private double ValorTotal;
     private int id;
     private String dataHoraAtual;
-
     private Cliente cliente;
 
     List<LancamentoVenda> lancamentoVendas = new ArrayList<>();
@@ -50,10 +52,26 @@ public class Venda {
         this.dataHoraAtual = dataHoraAtual;
     }
     public String toString() {
-        return "Venda do cliente " +cliente.getName()+ " ## Quantidade de Parcelas " +QuantidadedeParcelas+
+        return "\nVenda do cliente " +cliente.getName()+ " ## Quantidade de Parcelas " +QuantidadedeParcelas+
                 ", Valor Total: " +ValorTotal+ ", ID da Venda: " +id+ ", Data e Hora Atual: "+dataHoraAtual;
     }
     public List<LancamentoVenda> getLancamentoVendas(){
         return lancamentoVendas;
+    }
+    public void lancarVenda(){
+        double valor = getValorTotal() / getQuantidadedeParcelas();
+        Calendar calendar = Calendar.getInstance();
+        int hoje = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(Calendar.DAY_OF_MONTH, getCliente().getDiaVencimento());
+
+        if (hoje > cliente.getDiaVencimento()){
+            calendar.add(Calendar.MONTH, 1);
+        }
+        int i;
+        for (i=0; i<QuantidadedeParcelas; i++){
+            LancamentoVenda lancamentoVenda = new LancamentoVenda(valor, i+1, calendar.getTime(), this);
+            lancamentoVendas.add(lancamentoVenda);
+            calendar.add(Calendar.MONTH, 1);
+        }
     }
 }
